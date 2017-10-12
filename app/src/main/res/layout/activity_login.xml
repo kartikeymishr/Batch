@@ -43,30 +43,30 @@
             android:id="@+id/mobileNumberTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/mobileNumberText"
-            android:layout_alignStart="@+id/mobileNumberText"
+            android:layout_alignLeft="@+id/emailText"
+            android:layout_alignStart="@+id/emailText"
             android:layout_below="@+id/batchTextView"
             android:paddingLeft="4sp"
-            android:text="Enter mobile number" />
+            android:text="Enter Student Email ID" />
 
         <EditText
-            android:id="@+id/mobileNumberText"
+            android:id="@+id/emailText"
             android:layout_width="300sp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mobileNumberTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10sp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="textEmailAddress"
             android:textColor="@color/purple_accent" />
 
         <TextView
             android:id="@+id/passwordTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/mobileNumberText"
-            android:layout_alignStart="@+id/mobileNumberText"
-            android:layout_below="@+id/mobileNumberText"
+            android:layout_alignLeft="@+id/emailText"
+            android:layout_alignStart="@+id/emailText"
+            android:layout_below="@+id/emailText"
             android:paddingLeft="4sp"
             android:text="Enter password" />
 

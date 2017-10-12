@@ -1,5 +1,7 @@
 package com.kartikeymishr.batch;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,24 +14,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     TextView batchTextView;
     TextView signUpTextView;
     TextView loginTextView;
-    EditText mobileNumberText;
+    EditText emailText;
     EditText passwordText;
     FloatingActionButton loginButton;
     RelativeLayout backgroundLayout;
 
     boolean loginModeActive = true;
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     public void onClick(View v) {
@@ -79,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Toast.makeText(this, "sup bitch", Toast.LENGTH_LONG).show();
 
-        mobileNumberText = (EditText) findViewById(R.id.mobileNumberText);
+        emailText = (EditText) findViewById(R.id.emailText);
         passwordText = (EditText) findViewById(R.id.passwordText);
         passwordText.setOnKeyListener(this);
 
@@ -96,16 +98,63 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         backgroundLayout = (RelativeLayout) findViewById(R.id.backgroundLayout);
         backgroundLayout.setOnClickListener(this);
+
+        // Init Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        // Check if a session is already in progress. If yes -> Dashboard Activity
+        if (firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, Dashboard.class));
+        }
     }
 
     public void login(View view) {
-        if (mobileNumberText.getText().toString().equals("") || passwordText.getText().toString().equals("")) {
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+        if (email.equals("") || password.equals("")) {
+            Toast.makeText(this, "An email address and password are required", Toast.LENGTH_SHORT).show();
+        } else {
+            if (loginModeActive) {
+                // Code for logging in user
+                Log.i("Info", "Login Mode");
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.i("Info", "Login Failed: " + task.getException());
+                                    Toast.makeText(LoginActivity.this, "Login failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.i("Info", "Login Successful");
+                                    // Add intent to go to Dashboard
+                                }
+                            }
+                        });
+            } else {
+                // Code for signing up user
+                Log.i("Info", "Signup Mode");
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.i("Info", "Signup Failed: " + task.getException());
+                                    Toast.makeText(LoginActivity.this, "Signup Failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.i("Info","Signup Successful");
+                                    // Add intent to go to Dashboard
+                                }
+                            }
+                        });
+            }
+        }
+        /*if (emailText.getText().toString().equals("") || passwordText.getText().toString().equals("")) {
             Toast.makeText(this, "A mobile number and password are required", Toast.LENGTH_SHORT).show();
         } else {
             if (loginModeActive) {
                 // Code for logging in user
                 Log.i("Info", "Login Mode");
-                ParseUser.logInInBackground(mobileNumberText.getText().toString(), passwordText.getText().toString(), new LogInCallback() {
+                ParseUser.logInInBackground(emailText.getText().toString(), passwordText.getText().toString(), new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException e) {
                         if (e == null && user != null) {
@@ -121,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // Code for signing up user
                 Log.i("Info", "Signup Mode");
                 ParseUser user = new ParseUser();
-                user.setUsername(mobileNumberText.getText().toString());
+                user.setUsername(emailText.getText().toString());
                 user.setPassword(passwordText.getText().toString());
 
                 user.signUpInBackground(new SignUpCallback() {
@@ -137,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
             }
-        }
+        }*/
     }
 
     // Just leaving this here for use later
