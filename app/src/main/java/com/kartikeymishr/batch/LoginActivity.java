@@ -148,46 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         });
             }
         }
-        /*if (emailText.getText().toString().equals("") || passwordText.getText().toString().equals("")) {
-            Toast.makeText(this, "A mobile number and password are required", Toast.LENGTH_SHORT).show();
-        } else {
-            if (loginModeActive) {
-                // Code for logging in user
-                Log.i("Info", "Login Mode");
-                ParseUser.logInInBackground(emailText.getText().toString(), passwordText.getText().toString(), new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, ParseException e) {
-                        if (e == null && user != null) {
-                            Log.i("Login", "Successful");
-                            // Add intents to go to next activity
-                        } else {
-                            Log.i("Login", "Failed: " + e.getMessage());
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            } else {
-                // Code for signing up user
-                Log.i("Info", "Signup Mode");
-                ParseUser user = new ParseUser();
-                user.setUsername(emailText.getText().toString());
-                user.setPassword(passwordText.getText().toString());
-
-                user.signUpInBackground(new SignUpCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.i("Sign Up", "Successful");
-                            // Add intents to go to next activity
-                        } else {
-                            Log.i("Sign Up", "Failed: " + e.getMessage());
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
             }
-        }*/
-    }
 
     // Just leaving this here for use later
     @Override
