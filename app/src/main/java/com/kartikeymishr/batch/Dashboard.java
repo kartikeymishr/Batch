@@ -134,7 +134,7 @@ public class Dashboard extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Update the count to correspond to the number of tabs.
             return 2;
         }
 
