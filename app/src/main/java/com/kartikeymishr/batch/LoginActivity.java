@@ -1,6 +1,7 @@
 package com.kartikeymishr.batch;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
@@ -101,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Init Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
+        // firebaseAuth.getCurrentUser().reload();
 
         // Check if a session is already in progress. If yes -> Dashboard Activity
         if (firebaseAuth.getCurrentUser() != null) {
@@ -127,6 +130,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     Log.i("Info", "Login Successful");
                                     // Add intent to go to Dashboard
+                                    final FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    if (user.isEmailVerified()) {
+                                        startActivity(new Intent(LoginActivity.this, Dashboard.class));
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Please verify your email address", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });
@@ -143,6 +152,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     Log.i("Info","Signup Successful");
                                     // Add intent to go to Dashboard
+                                    final FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    user.sendEmailVerification()
+                                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(LoginActivity.this,
+                                                                "Verification email sent to " + user.getEmail(),
+                                                                Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(LoginActivity.this, Dashboard.class));
+                                                    } else {
+                                                        // Log.e(TAG, "sendEmailVerification", task.getException());
+                                                        Log.i("Info", "Verification failed");
+                                                        Toast.makeText(LoginActivity.this,
+                                                                "Failed to send verification email.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                 }
                             }
                         });

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -26,6 +28,17 @@ public class Dashboard extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.getCurrentUser().reload();
+
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (!firebaseUser.isEmailVerified()) {
+            Toast.makeText(this, "Email ID doesn't exist", Toast.LENGTH_SHORT).show();
+            firebaseAuth.signOut();
+            startActivity(new Intent(Dashboard.this, LoginActivity.class));
+            finish();
+        }
+
     }
 
     // Inflates the menu; this adds items to the action bar if it is present
