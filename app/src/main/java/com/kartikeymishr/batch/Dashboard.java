@@ -43,6 +43,8 @@ public class Dashboard extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
+    TabLayout tabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +84,18 @@ public class Dashboard extends AppCompatActivity {
             finish();
         }
 
+        final int[] ICONS = new int[]{
+                R.drawable.ic_attendance,
+                R.drawable.ic_timetable,
+                R.drawable.ic_mail,
+                R.drawable.ic_chat,
+        };
+
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.setupWithViewPager(mViewPager);
+
+        tabs.getTabAt(0).setIcon(ICONS[0]); // Attendance
+        tabs.getTabAt(1).setIcon(ICONS[1]); // Time Table
     }
 
 
@@ -142,9 +156,9 @@ public class Dashboard extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Attendance";
+                    return "";
                 case 1:
-                    return "Time Table";
+                    return "";
             }
             return null;
         }
