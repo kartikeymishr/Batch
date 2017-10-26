@@ -134,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     final FirebaseUser user = firebaseAuth.getCurrentUser();
                                     if (user.isEmailVerified()) {
                                         startActivity(new Intent(LoginActivity.this, Dashboard.class));
+                                        finish();
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Please verify your email address", Toast.LENGTH_SHORT).show();
                                     }
@@ -163,6 +164,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                                 "Verification email sent to " + user.getEmail(),
                                                                 Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent(LoginActivity.this, Dashboard.class));
+                                                        finish();
                                                     } else {
                                                         // Log.e(TAG, "sendEmailVerification", task.getException());
                                                         Log.i("Info", "Verification failed");
