@@ -1,6 +1,9 @@
 package com.kartikeymishr.batch;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,7 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView loginTextView;
     EditText emailText;
     EditText passwordText;
-    FloatingActionButton loginButton;
+    Button loginButton;
     RelativeLayout backgroundLayout;
 
     boolean loginModeActive = true;
@@ -44,9 +50,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             signUpTextView.setVisibility(View.INVISIBLE);
 
             // Verify this animation on devices with different screen sizes
-            loginButton.animate().translationXBy(-650);
+            // loginButton.animate().translationXBy(-650);
 
             loginTextView.setVisibility(View.VISIBLE);
+            loginButton.setText("Sign Up");
         } else if (v.getId() == R.id.loginTextView) {
             // When LOGIN is clicked
             loginModeActive = true;
@@ -54,9 +61,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginTextView.setVisibility(View.INVISIBLE);
 
             // Verify this animation on devices with different screen sizes
-            loginButton.animate().translationXBy(650);
+            // loginButton.animate().translationXBy(650);
 
             signUpTextView.setVisibility(View.VISIBLE);
+            loginButton.setText("Login");
         } else if (v.getId() == R.id.backgroundLayout || v.getId() == R.id.batchTextView) {
             // Getting the keyboard
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -81,6 +89,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         getSupportActionBar().hide();
 
+        // Changing status bar colour to WHITE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.WHITE);
+
+            View decor = getWindow().getDecorView();
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
         Toast.makeText(this, "sup bitch", Toast.LENGTH_LONG).show();
 
         emailText = (EditText) findViewById(R.id.emailText);
@@ -96,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginTextView = (TextView) findViewById(R.id.loginTextView);
         loginTextView.setOnClickListener(this);
 
-        loginButton = (FloatingActionButton) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
 
         backgroundLayout = (RelativeLayout) findViewById(R.id.backgroundLayout);
         backgroundLayout.setOnClickListener(this);
@@ -113,6 +131,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void login(View view) {
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.Theme_AppCompat_Light_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
         if (email.equals("") || password.equals("")) {
@@ -131,6 +154,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     Log.i("Info", "Login Successful");
                                     // Add intent to go to Dashboard
+
+                                    progressDialog.dismiss();
+                                    // Hiding the keyboard on button press
+                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
                                     final FirebaseUser user = firebaseAuth.getCurrentUser();
                                     if (user.isEmailVerified()) {
                                         startActivity(new Intent(LoginActivity.this, Dashboard.class));
@@ -154,6 +183,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     Log.i("Info","Signup Successful");
                                     // Add intent to go to Dashboard
+
+                                    // Hiding the keyboard on button press
+                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
                                     final FirebaseUser user = firebaseAuth.getCurrentUser();
                                     user.sendEmailVerification()
                                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener() {

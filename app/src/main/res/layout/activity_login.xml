@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="com.kartikeymishr.batch.LoginActivity">
 
     <RelativeLayout
@@ -11,12 +12,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -37,6 +32,7 @@
             android:layout_margin="30sp"
             android:text="Batch"
             android:textAllCaps="false"
+            android:textColor="@color/purple1"
             android:textSize="60sp" />
 
         <TextView
@@ -47,7 +43,8 @@
             android:layout_alignStart="@+id/emailText"
             android:layout_below="@+id/batchTextView"
             android:paddingLeft="4sp"
-            android:text="Enter Student Email ID" />
+            android:text="Email"
+            android:textColor="@color/purple1" />
 
         <EditText
             android:id="@+id/emailText"
@@ -56,9 +53,11 @@
             android:layout_below="@+id/mobileNumberTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10sp"
+            android:backgroundTint="@color/purple1"
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:textColor="@color/purple_accent" />
+            android:textColor="@color/purple1"
+            android:textColorLink="@color/purple1" />
 
         <TextView
             android:id="@+id/passwordTextView"
@@ -68,7 +67,8 @@
             android:layout_alignStart="@+id/emailText"
             android:layout_below="@+id/emailText"
             android:paddingLeft="4sp"
-            android:text="Enter password" />
+            android:text="Password"
+            android:textColor="@color/purple1" />
 
         <EditText
             android:id="@+id/passwordText"
@@ -77,39 +77,23 @@
             android:layout_alignLeft="@+id/passwordTextView"
             android:layout_alignStart="@+id/passwordTextView"
             android:layout_below="@+id/passwordTextView"
+            android:backgroundTint="@color/purple1"
             android:ems="10"
             android:inputType="textPassword"
-            android:textColor="@color/purple_accent" />
+            android:textColor="@color/purple1"
+            android:textColorLink="@color/purple1" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/loginButton"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/passwordText"
-            android:layout_alignRight="@+id/passwordText"
-            android:layout_below="@+id/passwordText"
-            android:layout_marginEnd="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginTop="18dp"
-            android:clickable="true"
-            android:onClick="login"
-            android:visibility="visible"
-            app:elevation="8dp"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/chevron_right" />
 
         <TextView
             android:id="@+id/signUpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/loginButton"
-            android:layout_alignLeft="@+id/passwordText"
-            android:layout_alignStart="@+id/passwordText"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="13dp"
-            android:text="Sign Up"
-            android:textAllCaps="true"
-            android:textColor="@color/purple_accent" />
+            android:layout_below="@+id/loginButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp"
+            android:text="No account yet? Create one"
+            android:textAllCaps="false"
+            android:textColor="@color/purple1" />
 
         <TextView
             android:id="@+id/loginTextView"
@@ -117,14 +101,23 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/signUpTextView"
             android:layout_alignBottom="@+id/signUpTextView"
-            android:layout_alignEnd="@+id/passwordText"
-            android:layout_alignRight="@+id/passwordText"
-            android:layout_marginBottom="18dp"
-            android:layout_marginRight="13dp"
-            android:text="Login"
-            android:textAllCaps="true"
-            android:textColor="@color/purple_accent"
+            android:layout_centerHorizontal="true"
+            android:text="Login instead"
+            android:textAllCaps="false"
+            android:textColor="@color/purple1"
             android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/loginButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="300sp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/passwordText"
+            android:layout_alignStart="@+id/passwordText"
+            android:layout_below="@+id/passwordText"
+            android:layout_marginTop="20dp"
+            android:onClick="login"
+            android:text="login" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
