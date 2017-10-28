@@ -41,6 +41,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseAuth firebaseAuth;
 
+    Window window;
+    View decor;
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.signUpTextView) {
@@ -90,16 +93,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().hide();
 
         // Changing status bar colour to WHITE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.WHITE);
+        /*window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.WHITE);
 
-            View decor = getWindow().getDecorView();
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
-        Toast.makeText(this, "sup bitch", Toast.LENGTH_LONG).show();
+        decor = getWindow().getDecorView();
+        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);*/
 
         emailText = (EditText) findViewById(R.id.emailText);
         passwordText = (EditText) findViewById(R.id.passwordText);
@@ -123,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
         // firebaseAuth.getCurrentUser().reload();
 
-        // Check if a session is already in progress. If yes -> TestDashboard Activity
+        // Check if a session is already in progress. If yes -> Dashboard Activity
         if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, Dashboard.class));
             finish();
@@ -133,8 +132,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void login(View view) {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.Theme_AppCompat_Light_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
@@ -144,21 +141,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (loginModeActive) {
                 // Code for logging in user
                 Log.i("Info", "Login Mode");
+                progressDialog.setMessage("Authenticating...");
+                progressDialog.show();
+
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
                                     Log.i("Info", "Login Failed: " + task.getException());
+                                    progressDialog.dismiss();
                                     Toast.makeText(LoginActivity.this, "Login failed: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 } else {
                                     Log.i("Info", "Login Successful");
                                     // Add intent to go to Dashboard
-
                                     progressDialog.dismiss();
-                                    // Hiding the keyboard on button press
-                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                                     final FirebaseUser user = firebaseAuth.getCurrentUser();
                                     if (user.isEmailVerified()) {
@@ -173,6 +170,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } else {
                 // Code for signing up user
                 Log.i("Info", "Signup Mode");
+                progressDialog.setMessage("Signing up...");
+                progressDialog.show();
+
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -182,26 +182,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     Toast.makeText(LoginActivity.this, "Signup Failed: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 } else {
                                     Log.i("Info","Signup Successful");
-                                    // Add intent to go to Dashboard
-
-                                    // Hiding the keyboard on button press
-                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
+                                    // Send verification email
                                     final FirebaseUser user = firebaseAuth.getCurrentUser();
                                     user.sendEmailVerification()
                                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener() {
                                                 @Override
                                                 public void onComplete(@NonNull Task task) {
                                                     if (task.isSuccessful()) {
+                                                        progressDialog.dismiss();
                                                         Toast.makeText(LoginActivity.this,
                                                                 "Verification email sent to " + user.getEmail(),
                                                                 Toast.LENGTH_SHORT).show();
-                                                        startActivity(new Intent(LoginActivity.this, Dashboard.class));
-                                                        finish();
                                                     } else {
                                                         // Log.e(TAG, "sendEmailVerification", task.getException());
                                                         Log.i("Info", "Verification failed");
+                                                        progressDialog.dismiss();
                                                         Toast.makeText(LoginActivity.this,
                                                                 "Failed to send verification email.",
                                                                 Toast.LENGTH_SHORT).show();
