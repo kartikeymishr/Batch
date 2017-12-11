@@ -96,6 +96,8 @@ public class Dashboard extends AppCompatActivity {
 
         tabs.getTabAt(0).setIcon(ICONS[0]); // Attendance
         tabs.getTabAt(1).setIcon(ICONS[1]); // Time Table
+        tabs.getTabAt(2).setIcon(ICONS[2]); // Mail
+        tabs.getTabAt(3).setIcon(ICONS[3]); // Chat
     }
 
 
@@ -141,6 +143,12 @@ public class Dashboard extends AppCompatActivity {
                 case 1:
                     TimeTableTab timeTableTab = new TimeTableTab();
                     return timeTableTab;
+                case 2:
+                    MailTab mailTab = new MailTab();
+                    return mailTab;
+                case 3:
+                    ChatTab chatTab = new ChatTab();
+                    return chatTab;
                 default:
                     return null;
             }
@@ -149,7 +157,7 @@ public class Dashboard extends AppCompatActivity {
         @Override
         public int getCount() {
             // Update the count to correspond to the number of tabs.
-            return 2;
+            return 4;
         }
 
         @Override
@@ -158,6 +166,10 @@ public class Dashboard extends AppCompatActivity {
                 case 0:
                     return "";
                 case 1:
+                    return "";
+                case 2:
+                    return "";
+                case 3:
                     return "";
             }
             return null;
