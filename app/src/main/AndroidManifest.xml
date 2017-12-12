@@ -20,10 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestDashboard" />
-        <activity
-            android:name=".Dashboard"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".Dashboard"></activity>
     </application>
 
 </manifest>

@@ -2,18 +2,13 @@ package com.kartikeymishr.batch;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,9 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Log.i("Info", "Switched to Signup Mode");
             signUpTextView.setVisibility(View.INVISIBLE);
 
-            // Verify this animation on devices with different screen sizes
-            // loginButton.animate().translationXBy(-650);
-
             loginTextView.setVisibility(View.VISIBLE);
             loginButton.setText("Sign Up");
         } else if (v.getId() == R.id.loginTextView) {
@@ -62,9 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginModeActive = true;
             Log.i("Info", "Switched to Login Mode");
             loginTextView.setVisibility(View.INVISIBLE);
-
-            // Verify this animation on devices with different screen sizes
-            // loginButton.animate().translationXBy(650);
 
             signUpTextView.setVisibility(View.VISIBLE);
             loginButton.setText("Login");
@@ -91,14 +80,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
-
-        // Changing status bar colour to WHITE
-        /*window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.WHITE);
-
-        decor = getWindow().getDecorView();
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);*/
 
         emailText = (EditText) findViewById(R.id.emailText);
         passwordText = (EditText) findViewById(R.id.passwordText);
