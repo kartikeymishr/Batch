@@ -42,6 +42,7 @@ public class Dashboard extends AppCompatActivity {
         functionsList = (ListView) findViewById(R.id.functionsList);
 
         ArrayList<String> functions = new ArrayList<>();
+        functions.add("Set Up Profile");
         functions.add("Calendar");
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, functions);
@@ -52,6 +53,9 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+                    // startActivity(new Intent(Dashboard.this, SetupActivity.class));
+                }
+                if (position == 1) {
                     startActivity(new Intent(Dashboard.this, CalendarActivity.class));
                 }
             }
